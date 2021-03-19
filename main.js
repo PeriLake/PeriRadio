@@ -1,9 +1,8 @@
-﻿var bodyParser = require('body-parser');var express = require('express');
+﻿var bodyParser = require('body-parser');
+var express = require('express');
 var app = express();
 const fs = require('fs');
 const { getAudioDurationInSeconds } = require('get-audio-duration');
-const { setTimeout } = require("timers");
-const e = require("express");
 app.set('view engine', 'ejs');
 app.use(express.static('public'))
 app.use(bodyParser.json()); 
