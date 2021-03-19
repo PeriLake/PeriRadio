@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>PeriLake</title>
+    <meta name="author" content="Peri">
+    <link rel="stylesheet" href="/bootstrap.css">
+    <script src="/bootstrap.js"></script>
+</head>
+<body>
+    <div class="card">
+        <div class="card-body">
+            <h2 style="font-weight: 700;font-family: inherit;">Hayal Radio</h2>
+            <table>
+                <td><img style="width: 75px;height: 75px;border-radius: 5px;margin-right: 5px;" src="/generic_song.jpg">
+</td><td style="color: rgba(0,0,0,.87);width:100%"><b><span id="artist" style="margin-bottom: 6px;">-</span></b><br><span id="songname">-</span><br>
+        <span id="gecensüre" style="font-size: .675rem;" class="timer">00:00</span><span style="font-size: .675rem;">&nbsp;/&nbsp;</span><span id="topsüre" class="timer" style="margin-right:.5rem;font-size: .675rem;">00:00</span>
+        <div style="width: 100%;height:3px;background-color:#bdbdbd;color:#5e5e5e;border-radius: 5px;float:left"><div id="timebar" style="width: 0%;height:3px;background-color:#5e5e5e;border-radius: 5px;float:left">&nbsp;</div></div><br>
+    </td>
+    </table>
+    <div id="tab"></div>
+    <svg xmlns="http://www.w3.org/2000/svg" onclick="play()" id="playbutton" width="40" height="40" fill="currentColor" viewBox="0 0 16 16"><path d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" onclick="pause()" id="pausebutton" style="display:none" width="40" height="40" fill="currentColor" viewBox="0 0 16 16"><path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/></svg>
+    <span style="float:right;margin-top: 7px;">
+    <span id="şarkılistesi" onclick="musiclist()" class="backgrounder" style="padding: 7px;font-size: 1.31429em;line-height: 1.58333em;vertical-align: -.3022em;"><svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" fill="currentColor" class="şarkılistesi" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>&nbsp;Şarkı Listesi</span>
+    <span id="sıradakişarkı" onclick="nextmusic()" class="backgrounder" style="padding: 7px;font-size: 1.31429em;line-height: 1.58333em;vertical-align: -.3022em;"><svg xmlns="http://www.w3.org/2000/svg" width="27" style="margin-bottom: 2px;" class="sıradakişarkı" height="27" fill="currentColor" viewBox="0 0 16 16"><path d="M15.5 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V8.753l-6.267 3.636c-.54.313-1.233-.066-1.233-.697v-2.94l-6.267 3.636C.693 12.703 0 12.324 0 11.693V4.308c0-.63.693-1.01 1.233-.696L7.5 7.248v-2.94c0-.63.693-1.01 1.233-.696L15 7.248V4a.5.5 0 0 1 .5-.5z"/></svg>&nbsp;Sıradaki Şarkı</span>
+    </span>
+</div></div>
+            
+</body>
+</html>
+<script>
+    var phanels=[
+  {color:"#F6B34E",image:"1.jpg"},
+/*  {color:"#4A8E9B",image:"2.jpg"},
+  {color:"#96BDB8",image:"3.jpg"},
+  {color:"#958ABE",image:"4.jpg"},
+  {color:"#3F4A5C",image:"5.jpg"},
+  {color:"#084363",image:"6.jpg"},
+  {color:"#AC778D",image:"7.jpg"},*/
+  {color:"#C67FB3",image:"8.jpg"},
+  {color:"#97562b",image:"9.jpg"},
+  {color:"#B1C1D6",image:"11.jpg"}
+/*
+  {color:"#325388",image:"10.webp"},
+  {color:"#B4C785",image:"12.jpg"},
+  {color:"#A3887A",image:"13.webp"}*/
+];
+var open=false;
+var selected=phanels[Math.floor(Math.random() * phanels.length)];
+document.querySelector(':root').style.setProperty('--color', selected.color);
+document.getElementsByTagName("body")[0].style.background=`url(/${selected.image}) no-repeat center center fixed`;
+var time;
+var nowtime;
+setInterval(()=>{
+if(time>nowtime){
+nowtime++
+get("timebar").style.width=`${100*nowtime/time}%`
+get("gecensüre").innerHTML=timeeditor(nowtime)
+}
+    if(time==nowtime&&open){reload()}
+},1000)
+fetch("/stream/details/now").then(e=>e.json()).then(a=>{
+    console.log(a)
+    var s=a.filename.replace(".mp3","").split("-")
+get("artist").innerHTML=s[0].trim()
+get("songname").innerHTML=s[1].trim();
+nowtime=a.now;
+time=a.duration;
+get("gecensüre").innerHTML=timeeditor(nowtime)
+get("topsüre").innerHTML=timeeditor(time)
+})
+function reload(){
+fetch("/stream/details/now").then(e=>e.json()).then(a=>{
+    console.log(a)
+    var s=a.filename.replace(".mp3","").split("-")
+get("artist").innerHTML=s[0].trim()
+get("songname").innerHTML=s[1].trim();
+nowtime=a.now;
+time=a.duration;
+get("gecensüre").innerHTML=timeeditor(nowtime)
+get("topsüre").innerHTML=timeeditor(time)
+})
+    if(get("audioplayer")){get("audioplayer").remove()}
+    var s=document.createElement("audio");
+    var a=document.createElement("source")
+    a.type="audio/mpeg";a.src="/stream";s.autoplay=true;s.controls=true;s.style.display="none";s.id="audioplayer";
+s.appendChild(a)
+document.body.appendChild(s)
+}
+
+function timeeditor(duration){ 
+    var hrs = ~~(duration / 3600);
+    var mins = ~~((duration % 3600) / 60);
+    var secs = ~~duration % 60;
+    var ret = "";
+
+    if (hrs > 0) {
+        ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+    }
+
+    ret += "" + mins + ":" + (secs < 10 ? "0" : "");
+    ret += "" + secs;
+    return ret;
+}
+
+function nextmusic(){
+    fetch("/stream/details/playlist").then(e=>e.json()).then(e=>{
+     alert(`Sanatçı: ${e[0]["filename"].split("-")[0].replace(".mp3","")}\nŞarkı Adı: ${e[0]["filename"].split("-")[1].replace(".mp3","")}\nUzunluğu: ${timeeditor(e[0]["duration"])}\n\nHayal Radio - İyi Dinlemeler.`)
+})}
+function musiclist(){var text="";
+    fetch("/stream/details/playlist").then(e=>e.json()).then(e=>{
+for(var i=0;i<10;i++){text+=`${i+1}- ${e[i].filename.replace(".mp3","")}\n`;}
+alert(text+"\nHayal Radio - İyi Dinlemeler")
+})}
+
+function get(a){return document.getElementById(a)}
+function play(){
+    get("playbutton").style.display="none";
+    get("pausebutton").style.display="block";
+    reload()
+    open=true;
+}
+function pause(){
+    get("pausebutton").style.display="none";
+    get("playbutton").style.display="block";
+    document.getElementById("audioplayer").remove()
+    open=false;
+}
+</script>
+<style>
+
+.backgrounder{margin-right: 8px;}
+#playbutton,#pausebutton{width:33px;height:33px;}
+#playbutton,#pausebutton,.backgrounder{transition: 430ms ease;margin-left: 6x;position:sticky;}
+#playbutton:hover,#pausebutton:hover,.şarkılistesi:hover,#şarkılistesi:hover,#sıradakişarkı:hover,.şarkılistesi:hover{transition:450ms ease;fill:var(--color);cursor: pointer;}
+#playbutton:hover,#pausebutton:hover,.backgrounder:hover{background-color: #e9e9e9;border-radius: 10px;}
+
+    #tab{border: 0;
+    border-top: 1px solid rgba(0,0,0,.12);
+    margin-top: 1rem;
+    margin-bottom: 1rem;}
+    
+    body{font-family: Roboto,-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+     -webkit-background-size: cover;
+     -moz-background-size: cover;
+     -o-background-size: cover;
+     background-size: contain;
+    font-size: .875rem;
+    background-color: #edecec;
+    color: #5e5e5e;
+    font-family: Roboto,-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.42857;
+    }
+    .card {
+        opacity: 0.87;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 0 4px 0 rgb(0 0 0 / 14%), 0 3px 4px 0 rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
+    display: flex;
+    margin: auto;
+    margin-top: 12%;
+    width: 500px;
+    flex-direction: column;
+    min-width: 0;
+    position: relative;
+    word-wrap: break-word;
+}
+    
+</style>

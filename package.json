@@ -1,0 +1,28 @@
+{
+  "name": "perilake",
+  "version": "1.3.2",
+  "description": "PeriLake Website",
+  "main": "main.js",
+  "scripts": {
+    "test": "node main.js"
+  },
+  "keywords": [
+    "perilake",
+    "peri",
+    "apseperi",
+    "lalf",
+    "seon",
+    "mi",
+    "seonmi"
+  ],
+  "author": "^Peri",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "get-audio-duration": "^2.0.3",
+    "quick.db": "^7.1.3"
+  }
+}

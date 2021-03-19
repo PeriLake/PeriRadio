@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>PeriLake</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="shortcut icon" href="favicon_16.ico"/>
+    <link rel="bookmark" href="favicon_16.ico"/>
+    <link rel="stylesheet" href="/dist/css/site.min.css">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,800,700,400italic,600italic,700italic,800italic,300italic" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="/dist/js/site.min.js"></script>
+  </head>
+  <body>
+    <!--nav-->
+    <nav role="navigation" class="navbar navbar-custom">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button data-target="#bs-content-row-navbar-collapse-5" data-toggle="collapse" class="navbar-toggle" type="button">
+              <span class="sr-only"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a href="#" class="navbar-brand">PeriLake</a>
+          </div>
+
+          <div id="bs-content-row-navbar-collapse-5" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown">
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Admin <b class="caret"></b></a>
+                <ul role="menu" class="dropdown-menu">
+                  <li class="active"><a href="/">Çıkış Yap</a></li>
+                </ul>
+              </li>
+            </ul>
+
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+    <!--header-->
+    <div class="container-fluid">
+    <!--documents-->
+        <div class="row row-offcanvas row-offcanvas-left">
+          <div class="col-xs-6 col-sm-3 sidebar-offcanvas" role="navigation">
+            <ul class="list-group panel">
+              <li class="list-group-item"><input type="text" class="form-control search-query" placeholder="Hayal Radio Panel"></li>
+              <center>
+                <li><div><button type="button" style="width: 90;" class="btn" data-toggle="tooltip" data-placement="top" onclick="window.location='/api/list?password=.admin-^Nigolirep%'" title="Şarkı listelemesi">Şarkı Listesi</button><br><br></li>
+              <li><div ><button type="button" style="width: 90;" class="btn" data-toggle="tooltip" data-placement="top" onclick="fetch(`/api/skip?token=<%- token %>`).then(e=>e.json()).then(e=>{alert(`Yeni Şarkı: ${e.filename}`)})" title="Şuanki Şarkıyı Geçer">Şarkıyı Geç</button><br><br></li>
+              <li><div><button type="button" style="width: 90;" class="btn" data-toggle="tooltip" onclick="fetch(`/api/restart?token=<%- token %>`).then(e=>e.text()).then(e=>{alert(e)})" data-placement="top" title="Reload Fonksiyonunu Çağırır.">Listeyi yeniden yükle</button><br><br></li>
+              <li><div><button type="button" style="width: 90;" class="btn " data-toggle="tooltip" onclick="window.location='/'" data-placement="top" title="Radyo sayfasını açar">Radyoya geri dön</button></li>
+              </center><li>
+              </li>
+              </ul>
+          </div>
+          <div class="col-xs-12 col-sm-9 content">
+            <div class="panel panel-default" style="min-height: 300px;">
+              <div class="panel-heading">
+                <h3 class="panel-title"><a href="javascript:void(0);" class="toggle-sidebar"></a>Şarkı Listesi</h3></div><br>
+<center><button onclick="yukarı()" style="background-color: #daca51;width: 40px;height:40px;">⬆︎</button>&nbsp;&nbsp;&nbsp;<button onclick="assagi()" style="width: 40px;height:40px;background-color: #51bada;">⬇️</button></center>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Song Name</th>
+                      <th>Song Length</th>
+                    </tr>
+                  </thead>
+                  <tbody id="inputtbody">
+                    </tbody>
+                </table> 
+                  </div>
+                </div>
+              </div><!-- panel body -->
+            </div>
+        </div><!-- content -->
+      </div>
+    </div>
+  
+      </div>
+    </div>
+  </body>
+</html>
+<script>
+  var number=0;
+  var deleted=0;
+  var json;
+/*                  <tr>
+                      <td><input type="radio" data-idnumber=${number} name="peri"></td>
+                      <td>Anne Maria - 2002</td>
+                      <td>${timeeditor()}</td>
+                    </tr>
+                    */
+fetch("/stream/details/playlist").then(e=>e.json()).then(e=>{var text="";json=e;
+e.forEach(a => {
+text+=`<tr id="${number}" data-json='{\"filename\":\"${(e[number].filename)}\",\"duration\":${e[number].duration}}'><td><input type="radio" disabled onclick='if(get("selectedradio")){get("selectedradio").id="notselected";};this.id="selectedradio"' data-idnumber=${number} data-altid="${number}" name="peri"></td><td>${e[number].filename}</td><td>${timeeditor(e[number].duration)}</td></tr>`
+number++
+});get("inputtbody").innerHTML=text;})
+/*
+function assagi(){
+if(!get("selectedradio")) return alert("Bir Şarkıyı Seç")
+if(get(get("selectedradio").dataset.idnumber)==json.length)return alert("Bu elementi aşsağı indiremezsin!");
+var deisecek=get(get("selectedradio").dataset.idnumber);
+var alttaki=get(parseInt(get("selectedradio").dataset.idnumber)+1+deleted)
+deleted++;
+alttaki.remove()
+deisecek.dataset.altid=`${parseInt(get("selectedradio").dataset.altid)+1}`;
+}
+function yukarı(){
+if(!get("selectedradio")) return alert("Bir Şarkıyı Seç")
+var element=get(get("selectedradio").dataset.idnumber);
+var üstelement=get(`${parseInt(get("selectedradio").dataset.idnumber)-1}`);
+if(element.id==0)return alert("Bu elementi yukarı taşıyamazsın!");
+get("selectedradio").dataset.idnumber=`${parseInt(get("selectedradio").dataset.idnumber)-1}`
+element.id=`${parseInt(element.id)-1}`
+üstelement.id=`${parseInt(üstelement.id)+1}`
+üstelement.remove();
+element.appendChild(üstelement)
+
+}
+*/
+function get(a){return document.getElementById(a)}
+function timeeditor(duration){ 
+    var hrs = ~~(duration / 3600);
+    var mins = ~~((duration % 3600) / 60);
+    var secs = ~~duration % 60;
+    var ret = "";
+
+    if (hrs > 0) {
+        ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+    }
+
+    ret += "" + mins + ":" + (secs < 10 ? "0" : "");
+    ret += "" + secs;
+    return ret;
+}
+</script>
